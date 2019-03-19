@@ -1,4 +1,4 @@
-package su.zzz.android.currencysalemonitormgn;
+package database;
 
 public class MonitorDbSchema {
     public static final class CourseTable {

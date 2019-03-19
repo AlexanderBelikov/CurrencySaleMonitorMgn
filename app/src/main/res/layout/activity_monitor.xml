@@ -5,12 +5,101 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".MonitorActivity">
-
-    <Button
-        android:id="@+id/button_get_xml"
+    tools:context=".MonitorActivity"
+    android:id="@+id/ll_monitor"
+    android:gravity="center_horizontal">
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Button" />
+        android:orientation="horizontal"
+        android:layout_margin="16dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_weight="1"
+            android:text="@string/usd"
+            android:textAppearance="@android:style/TextAppearance.Large" />
+        <TextView
+            android:id="@+id/tv_usd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_weight="1"
+            android:textAlignment="center"
+            android:minEms="2"
+            android:textAppearance="@android:style/TextAppearance.Large" />
+        <CheckBox
+            android:id="@+id/cb_usd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            />
+        <EditText
+            android:id="@+id/et_usd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:autofillHints="0.0"
+            android:ems="3"
+            android:inputType="numberDecimal"
+            android:textAppearance="@android:style/TextAppearance.Large"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_margin="16dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_weight="1"
+            android:text="@string/eur"
+            android:textAppearance="@android:style/TextAppearance.Large" />
+        <TextView
+            android:id="@+id/tv_eur"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_weight="1"
+            android:textAlignment="center"
+            android:minEms="2"
+            android:textAppearance="@android:style/TextAppearance.Large" />
+        <CheckBox
+            android:id="@+id/cb_eur"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            />
+        <EditText
+            android:id="@+id/et_eur"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:autofillHints="0.0"
+            android:ems="3"
+            android:inputType="numberDecimal"
+            android:textAppearance="@android:style/TextAppearance.Large"/>
+    </LinearLayout>
+    <Button
+        android:id="@+id/b_refresh"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/update" />
+
+    <Button
+        android:id="@+id/button_write_db"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/write_db"
+        android:visibility="invisible" />
+
+    <Button
+        android:id="@+id/button_read_db"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/read_db"
+        android:visibility="invisible" />
 />
 </LinearLayout>
