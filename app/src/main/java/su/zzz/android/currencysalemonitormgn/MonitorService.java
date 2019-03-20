@@ -3,6 +3,8 @@ package su.zzz.android.currencysalemonitormgn;
 import android.app.AlarmManager;
 import android.app.IntentService;
 import android.app.PendingIntent;
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -10,6 +12,8 @@ import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import java.util.concurrent.TimeUnit;
+
+import su.zzz.android.currencysalemonitormgn.widget.MonitorWidget;
 
 public class MonitorService extends IntentService {
     private static final String TAG = MonitorService.class.getSimpleName();
@@ -32,6 +36,12 @@ public class MonitorService extends IntentService {
             MonitorPreferences.setCourseFetchDate(getApplicationContext(), System.currentTimeMillis());
             MonitorPreferences.setCourseFetchSuccess(getApplicationContext(), true);
             sendBroadcast(new Intent(ACTION_UPDATE_COURSE));
+
+//            Intent intentWidget = new Intent(this, MonitorWidget.class);
+//            intentWidget.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+//            int[] ids = AppWidgetManager.getInstance(getApplication()).getAppWidgetIds(new ComponentName(getApplication(), MonitorWidget.class));
+//            intentWidget.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
+//            sendBroadcast(intentWidget);
         } catch (Exception e) {
             MonitorPreferences.setCourseFetchDate(getApplicationContext(), System.currentTimeMillis());
             MonitorPreferences.setCourseFetchSuccess(getApplicationContext(), false);

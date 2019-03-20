@@ -15,13 +15,11 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
-import database.MonitorDbHelper;
-import database.MonitorDbSchema;
+import su.zzz.android.currencysalemonitormgn.database.MonitorDbHelper;
+import su.zzz.android.currencysalemonitormgn.database.MonitorDbSchema;
 
 public class MonitorActivity extends AppCompatActivity {
     private static final String TAG = MonitorActivity.class.getSimpleName();
@@ -136,22 +134,10 @@ public class MonitorActivity extends AppCompatActivity {
             return null;
         }
     }
-    private float GetMinCourse(String currency){
-        float minCourse = 0.0f;
-        List<Course> courseList = MonitorDbHelper.getInstance(getApplicationContext()).getMinCourseList(currency);
-        if(courseList.size() != 0){
-            if(currency == MonitorDbSchema.CourseTable.Cols.USD) {
-                minCourse = courseList.get(0).getUSD();
-            } else if (currency == MonitorDbSchema.CourseTable.Cols.EUR) {
-                minCourse = courseList.get(0).getEUR();
-            }
-        }
-        return minCourse;
-    }
 
     private void updateUI(){
-        tv_usd.setText(String.format("%.2f", GetMinCourse(MonitorDbSchema.CourseTable.Cols.USD)));
-        tv_eur.setText(String.format("%.2f", GetMinCourse(MonitorDbSchema.CourseTable.Cols.EUR)));
+        tv_usd.setText(String.format("%.2f", MonitorDbHelper.getInstance(getApplicationContext()).getMinCourse(MonitorDbSchema.CourseTable.Cols.USD)));
+        tv_eur.setText(String.format("%.2f", MonitorDbHelper.getInstance(getApplicationContext()).getMinCourse(MonitorDbSchema.CourseTable.Cols.EUR)));
         String sb_text = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss").format(MonitorPreferences.getCourseFetchDate(getApplicationContext()))+" : "+(MonitorPreferences.getCourseFetchSuccess(getApplicationContext())?"Success":"Fail");
         Snackbar.make(findViewById(R.id.ll_monitor), sb_text, Snackbar.LENGTH_INDEFINITE)
                 .show();

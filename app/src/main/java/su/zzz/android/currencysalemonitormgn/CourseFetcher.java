@@ -1,7 +1,6 @@
 package su.zzz.android.currencysalemonitormgn;
 
 import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 import org.xmlpull.v1.XmlPullParserException;
 import java.io.IOException;
@@ -9,11 +8,9 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
-import database.*;
+import su.zzz.android.currencysalemonitormgn.database.*;
 
 public class CourseFetcher {
     private static final String TAG = CourseFetcher.class.getSimpleName();

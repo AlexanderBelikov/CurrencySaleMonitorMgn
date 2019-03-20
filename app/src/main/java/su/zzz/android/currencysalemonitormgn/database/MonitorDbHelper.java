@@ -1,6 +1,6 @@
-package database;
+package su.zzz.android.currencysalemonitormgn.database;
 
-import database.MonitorDbSchema.CourseTable;
+import su.zzz.android.currencysalemonitormgn.database.MonitorDbSchema.CourseTable;
 import su.zzz.android.currencysalemonitormgn.Course;
 
 import android.content.ContentValues;
@@ -89,5 +89,17 @@ public class MonitorDbHelper extends SQLiteOpenHelper {
             cursor.close();
         }
         return courseList;
+    }
+    public float getMinCourse(String currency){
+        float minCourse = 0.0f;
+        List<Course> courseList = getMinCourseList(currency);
+        if(courseList.size() != 0){
+            if(currency == MonitorDbSchema.CourseTable.Cols.USD) {
+                minCourse = courseList.get(0).getUSD();
+            } else if (currency == MonitorDbSchema.CourseTable.Cols.EUR) {
+                minCourse = courseList.get(0).getEUR();
+            }
+        }
+        return minCourse;
     }
 }
