@@ -8,15 +8,17 @@ import android.os.AsyncTask;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
-import java.util.List;
 
 import su.zzz.android.currencysalemonitormgn.database.MonitorDbHelper;
 import su.zzz.android.currencysalemonitormgn.database.MonitorDbSchema;
@@ -27,9 +29,11 @@ public class MonitorActivity extends AppCompatActivity {
     Button buttonWriteDb;
     Button buttonReadDb;
     TextView tv_usd;
-    CheckBox cb_usd;
     TextView tv_eur;
     CheckBox cb_eur;
+    CheckBox cb_usd;
+    EditText et_usd;
+    EditText et_eur;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +68,43 @@ public class MonitorActivity extends AppCompatActivity {
 
         cb_usd.setOnCheckedChangeListener(cb_listener);
         cb_eur.setOnCheckedChangeListener(cb_listener);
+
+        et_usd = findViewById(R.id.et_usd);
+        et_eur = findViewById(R.id.et_eur);
+        et_usd.setText(String.format("%.2f",MonitorPreferences.getUsdExpectedCourse(getApplicationContext())));
+        et_eur.setText(String.format("%.2f",MonitorPreferences.getEurExpectedCourse(getApplicationContext())));
+        et_usd.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(s.length()>0){
+                    MonitorPreferences.setUsdExpectedCourse(getApplicationContext(), Float.valueOf(s.toString()));
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+        et_eur.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(s.length()>0) {
+                    MonitorPreferences.setEurExpectedCourse(getApplicationContext(), Float.valueOf(s.toString()));
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
 
 
         buttonWriteDb = findViewById(R.id.button_write_db);

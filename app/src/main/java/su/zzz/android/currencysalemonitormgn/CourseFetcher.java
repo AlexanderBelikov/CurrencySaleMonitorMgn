@@ -23,7 +23,7 @@ public class CourseFetcher {
 
         try {
             InputStream stream = connection.getInputStream();
-            Log.i(TAG, "getXml: getResponseCode:"+connection.getResponseCode()+":"+HttpURLConnection.HTTP_OK);
+//            Log.i(TAG, "getXml: getResponseCode:"+connection.getResponseCode()+":"+HttpURLConnection.HTTP_OK);
             if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
                 throw new IOException(connection.getResponseMessage());
             }

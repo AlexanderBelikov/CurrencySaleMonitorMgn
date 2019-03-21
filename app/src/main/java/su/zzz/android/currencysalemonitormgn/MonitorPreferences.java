@@ -52,4 +52,24 @@ public class MonitorPreferences {
                 .putBoolean(PREF_EUR_MONITOR_STATE, state)
                 .apply();
     }
+
+    public static float getUsdExpectedCourse(Context context){
+        return PreferenceManager.getDefaultSharedPreferences(context).getFloat(PREF_USD_EXPECTED_COURSE,0);
+    }
+    public static void setUsdExpectedCourse(Context context, float price){
+        PreferenceManager.getDefaultSharedPreferences(context)
+                .edit()
+                .putFloat(PREF_USD_EXPECTED_COURSE, price)
+                .apply();
+    }
+
+    public static float getEurExpectedCourse(Context context){
+        return PreferenceManager.getDefaultSharedPreferences(context).getFloat(PREF_EUR_EXPECTED_COURSE,0);
+    }
+    public static void setEurExpectedCourse(Context context, float price){
+        PreferenceManager.getDefaultSharedPreferences(context)
+                .edit()
+                .putFloat(PREF_EUR_EXPECTED_COURSE, price)
+                .apply();
+    }
 }

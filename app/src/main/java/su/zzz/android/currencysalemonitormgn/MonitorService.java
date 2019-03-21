@@ -2,22 +2,25 @@ package su.zzz.android.currencysalemonitormgn;
 
 import android.app.AlarmManager;
 import android.app.IntentService;
+import android.app.Notification;
 import android.app.PendingIntent;
-import android.appwidget.AppWidgetManager;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.os.SystemClock;
 import android.support.annotation.Nullable;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
 import java.util.concurrent.TimeUnit;
 
-import su.zzz.android.currencysalemonitormgn.widget.MonitorWidget;
+import su.zzz.android.currencysalemonitormgn.database.MonitorDbHelper;
+import su.zzz.android.currencysalemonitormgn.database.MonitorDbSchema;
 
 public class MonitorService extends IntentService {
     private static final String TAG = MonitorService.class.getSimpleName();
-    public static final long POOL_INTERVAL_MS = TimeUnit.SECONDS.toMillis(15);
+//    public static final long POOL_INTERVAL_MS = TimeUnit.SECONDS.toMillis(15);
+    public static final long POOL_INTERVAL_MS = TimeUnit.MINUTES.toMillis(1);
     public static final String ACTION_UPDATE_COURSE = "su.zzz.android.currencysalemonitormgn.UPDATE_COURSE";
     public MonitorService() {
         super(TAG);
@@ -36,12 +39,7 @@ public class MonitorService extends IntentService {
             MonitorPreferences.setCourseFetchDate(getApplicationContext(), System.currentTimeMillis());
             MonitorPreferences.setCourseFetchSuccess(getApplicationContext(), true);
             sendBroadcast(new Intent(ACTION_UPDATE_COURSE));
-
-//            Intent intentWidget = new Intent(this, MonitorWidget.class);
-//            intentWidget.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
-//            int[] ids = AppWidgetManager.getInstance(getApplication()).getAppWidgetIds(new ComponentName(getApplication(), MonitorWidget.class));
-//            intentWidget.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
-//            sendBroadcast(intentWidget);
+            checkCourse();
         } catch (Exception e) {
             MonitorPreferences.setCourseFetchDate(getApplicationContext(), System.currentTimeMillis());
             MonitorPreferences.setCourseFetchSuccess(getApplicationContext(), false);
@@ -54,6 +52,37 @@ public class MonitorService extends IntentService {
         boolean isNetworkAvailable = cm.getActiveNetworkInfo() != null;
         boolean isNetworkConnected = isNetworkAvailable && cm.getActiveNetworkInfo().isConnected();
         return isNetworkConnected;
+    }
+
+    private void checkCourse() {
+        float usdExpectedCourse = MonitorPreferences.getUsdExpectedCourse(getApplicationContext());
+        float eurExpectedCourse = MonitorPreferences.getEurExpectedCourse(getApplicationContext());
+        float usdCourse = MonitorDbHelper.getInstance(getApplicationContext()).getMinCourse(MonitorDbSchema.CourseTable.Cols.USD);
+        float eurCourse = MonitorDbHelper.getInstance(getApplicationContext()).getMinCourse(MonitorDbSchema.CourseTable.Cols.EUR);
+        boolean usdAlert = MonitorPreferences.getUsdMonitorState(getApplicationContext()) && usdExpectedCourse > 0.0f && usdExpectedCourse >= usdCourse;
+        boolean eurAlert = MonitorPreferences.getEurMonitorState(getApplicationContext()) && eurExpectedCourse > 0.0f && eurExpectedCourse >= eurCourse;
+        if(usdAlert && eurAlert){
+            showNotification("Usd: "+String.format("%.2f", usdCourse)+"; Eur: "+String.format("%.2f", eurCourse));
+        } else if(usdAlert){
+            showNotification("Usd: "+String.format("%.2f", usdCourse));
+        } else if(eurAlert) {
+            showNotification("Eur: "+String.format("%.2f", eurCourse));
+        } else {
+            hideNotification();
+        }
+    }
+    private void showNotification(String text) {
+        Notification notification = new NotificationCompat.Builder(this)
+                .setSmallIcon(android.R.drawable.ic_popup_reminder)
+                .setContentTitle(getString(R.string.app_name))
+                .setContentText(text)
+                .build();
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+        notificationManager.notify(0, notification);
+    }
+    private void hideNotification() {
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+        notificationManager.cancelAll();
     }
 
     public static void setServiceAlarm(Context context, boolean isOn){
